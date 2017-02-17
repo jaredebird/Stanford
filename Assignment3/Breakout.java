@@ -42,8 +42,8 @@ public class Breakout extends GraphicsProgram {
 	private static final int BRICK_SEP = 4;
 
 /** Width of a brick */
-	private static final int BRICK_WIDTH =
-	  (WIDTH - (NBRICKS_PER_ROW - 1) * BRICK_SEP) / NBRICKS_PER_ROW;
+	private static final int BRICK_WIDTH = (WIDTH - (NBRICKS_PER_ROW - 1) * BRICK_SEP) / NBRICKS_PER_ROW;
+
 
 /** Height of a brick */
 	private static final int BRICK_HEIGHT = 8;
@@ -61,6 +61,99 @@ public class Breakout extends GraphicsProgram {
 /** Runs the Breakout program. */
 	public void run() {
 		/* You fill this in, along with any subsidiary methods */
+		setupBoard();
+		runGame();
 	}
 
+private void runGame() {
+	// TODO Auto-generated method stub
+	
+}
+
+private void setWindowSize() {
+	setSize(APPLICATION_WIDTH, APPLICATION_HEIGHT);	
+}
+
+	private void setupBoard() {
+		setWindowSize();
+		
+		createBricks();
+		createPaddle();
+
+	}
+
+	private void createPaddle() {
+
+		
+	}
+
+	private void createBricks() {
+		
+		add(new GRect(30, 50, 50, 80 ));
+		int leftOffset = findLeftStart();
+		
+		int topOffset = BRICK_Y_OFFSET;
+		Color[] rowColors = new Color[NBRICK_ROWS];
+			rowColors = createColorArray();
+			for (int i=0; i<NBRICK_ROWS; i++){
+				createRow(rowColors[i], leftOffset, topOffset);
+				topOffset += (BRICK_HEIGHT + BRICK_SEP);
+			}
+
+	}
+
+	private int findLeftStart() {
+		int totalBrickWidth = BRICK_WIDTH*NBRICKS_PER_ROW;
+		int totalBrickSpacing = BRICK_SEP * (NBRICKS_PER_ROW - 1);
+		
+		return (WIDTH-(totalBrickWidth + totalBrickSpacing))/2;
+	}
+
+	private void createRow(Color rowColor, int leftOffset, int topOffset) {
+
+		for (int i=0;i<NBRICKS_PER_ROW; i++){
+			GRect brick = new GRect(BRICK_WIDTH, BRICK_HEIGHT, leftOffset, topOffset);
+			brick.setFilled(true);
+			brick.setColor(Color.RED);
+			add(brick);
+			
+			
+			GRect brick2 = new GRect(leftOffset, topOffset, BRICK_WIDTH, BRICK_HEIGHT);
+			brick2.setFilled(true);
+			brick2.setFillColor(Color.RED);
+			add(brick2);
+			
+			
+			
+			leftOffset += (BRICK_WIDTH + BRICK_SEP);
+		}
+	}
+
+	private Color[] createColorArray() {
+	// TODO Auto-generated method stub
+	Color[] rowColors = new Color[NBRICK_ROWS];
+	
+	for (int i=0;i<NBRICK_ROWS; i++){
+		switch (i/2){
+		case 0:
+			rowColors[i]= Color.RED;
+			break;
+		case 1:
+			rowColors[i]= Color.ORANGE;
+			break;
+		case 2:
+			rowColors[i]= Color.YELLOW;
+			break;	
+		case 3:
+			rowColors[i]= Color.GREEN;
+			break;
+		default:
+			rowColors[i]= Color.CYAN;
+			break;
+		}
+	
+	}
+
+	return rowColors;
+}
 }
