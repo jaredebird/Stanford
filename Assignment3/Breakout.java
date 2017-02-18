@@ -18,8 +18,8 @@ import java.awt.event.*;
 public class Breakout extends GraphicsProgram {
 
 /** Width and height of application window in pixels */
-	public static final int APPLICATION_WIDTH = 400;
-	public static final int APPLICATION_HEIGHT = 600;
+	public static final int APPLICATION_WIDTH = 800;
+	public static final int APPLICATION_HEIGHT = 1200;
 
 /** Dimensions of game board (usually the same) */
 	private static final int WIDTH = APPLICATION_WIDTH;
@@ -39,20 +39,20 @@ public class Breakout extends GraphicsProgram {
 	private static final int NBRICK_ROWS = 10;
 
 /** Separation between bricks */
-	private static final int BRICK_SEP = 4;
+	private static final int BRICK_SEP = 8;
 
 /** Width of a brick */
 	private static final int BRICK_WIDTH = (WIDTH - (NBRICKS_PER_ROW - 1) * BRICK_SEP) / NBRICKS_PER_ROW;
 
 
 /** Height of a brick */
-	private static final int BRICK_HEIGHT = 8;
+	private static final int BRICK_HEIGHT = 16;
 
 /** Radius of the ball in pixels */
-	private static final int BALL_RADIUS = 10;
+	private static final int BALL_RADIUS = 20;
 
 /** Offset of the top brick row from the top */
-	private static final int BRICK_Y_OFFSET = 70;
+	private static final int BRICK_Y_OFFSET = 140;
 
 /** Number of turns */
 	private static final int NTURNS = 3;
@@ -75,21 +75,33 @@ private void setWindowSize() {
 }
 
 	private void setupBoard() {
+	
 		setWindowSize();
-		
+		pause(30);
 		createBricks();
 		createPaddle();
-
+		addMouseListeners();
 	}
 
 	private void createPaddle() {
-
+		 paddle = new GRect(PADDLE_WIDTH, PADDLE_HEIGHT);
+		paddle.setFilled(true);
+		paddle.setColor(Color.BLACK);
+		add(paddle, getWidth()/2, getHeight()-PADDLE_Y_OFFSET);
+		
 		
 	}
 
+	public void mouseMoved(MouseEvent e) {
+
+			paddle.setLocation(e.getX()-paddle.getWidth()/2, paddle.getY());
+
+
+	}
+
+
 	private void createBricks() {
 		
-		add(new GRect(30, 50, 50, 80 ));
 		int leftOffset = findLeftStart();
 		
 		int topOffset = BRICK_Y_OFFSET;
@@ -112,19 +124,11 @@ private void setWindowSize() {
 	private void createRow(Color rowColor, int leftOffset, int topOffset) {
 
 		for (int i=0;i<NBRICKS_PER_ROW; i++){
-			GRect brick = new GRect(BRICK_WIDTH, BRICK_HEIGHT, leftOffset, topOffset);
+			GRect brick = new GRect(BRICK_WIDTH, BRICK_HEIGHT);
 			brick.setFilled(true);
-			brick.setColor(Color.RED);
-			add(brick);
-			
-			
-			GRect brick2 = new GRect(leftOffset, topOffset, BRICK_WIDTH, BRICK_HEIGHT);
-			brick2.setFilled(true);
-			brick2.setFillColor(Color.RED);
-			add(brick2);
-			
-			
-			
+			brick.setColor(rowColor);
+			add(brick, leftOffset, topOffset);
+
 			leftOffset += (BRICK_WIDTH + BRICK_SEP);
 		}
 	}
@@ -156,4 +160,5 @@ private void setWindowSize() {
 
 	return rowColors;
 }
+	private GRect paddle;
 }
