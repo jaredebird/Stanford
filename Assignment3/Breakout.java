@@ -56,7 +56,14 @@ public class Breakout extends GraphicsProgram {
 
 /** Number of turns */
 	private static final int NTURNS = 3;
-
+	
+/** Vertical position of ball start */
+	private static final int BALL_START_Y = 500;
+	
+	/** Vertical Velocity*/
+	private static final int Y_VELOCITY = 3;
+	
+	
 /* Method: run() */
 /** Runs the Breakout program. */
 	public void run() {
@@ -80,9 +87,18 @@ private void setWindowSize() {
 		pause(30);
 		createBricks();
 		createPaddle();
+		createBall();
 		addMouseListeners();
 	}
-
+	private void createBall(){
+		ball = new GOval(BALL_RADIUS*2,BALL_RADIUS*2);
+		ball.setVisible(false);
+//		ball.setBounds(getWidth()/2-BALL_RADIUS, BALL_START_Y);
+		ball.setBounds(getWidth()/2-BALL_RADIUS, BALL_START_Y, BALL_RADIUS*2,BALL_RADIUS*2);
+		ball.setFilled(true);
+		ball.setColor(Color.BLACK);
+		add(ball);
+	}
 	private void createPaddle() {
 		 paddle = new GRect(PADDLE_WIDTH, PADDLE_HEIGHT);
 		paddle.setFilled(true);
@@ -93,12 +109,33 @@ private void setWindowSize() {
 	}
 
 	public void mouseMoved(MouseEvent e) {
-
 			paddle.setLocation(e.getX()-paddle.getWidth()/2, paddle.getY());
-
-
+	}
+	public void mouseClicked(MouseEvent e){
+		
+		activateBall();
+		startBall();
+		while (ball.isVisible()){
+		moveBall();
+		checkCollision();
+		}
+		
 	}
 
+
+	private void startBall() {
+		
+		vx = rgen.nextDouble(1.0, 3.0);
+		if (rgen.nextBoolean(0.5)) vx = -vx;
+		vy = Y_VELOCITY;
+	}
+
+	private void activateBall() {
+		if (!ball.isVisible()){
+			ball.setVisible(true);
+		}
+		
+	}
 
 	private void createBricks() {
 		
@@ -161,4 +198,8 @@ private void setWindowSize() {
 	return rowColors;
 }
 	private GRect paddle;
+	private double vx, vy;
+	private GOval ball;
+	private RandomGenerator rgen = RandomGenerator.getInstance();
+
 }
